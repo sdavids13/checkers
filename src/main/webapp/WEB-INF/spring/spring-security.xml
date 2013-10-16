@@ -1,0 +1,36 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security 
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+	<http use-expressions="true">
+		<intercept-url pattern="/signup" access="permitAll" />
+		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/admin/h2" access="permitAll" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<remember-me key="myAppKey" token-validity-seconds="1296000"/>
+		<form-login login-page="/login" default-target-url="/" authentication-failure-url="/login?loginError=true" />
+		<logout invalidate-session="true" delete-cookies="true" logout-url="/logout" logout-success-url="/"/>
+	</http>
+
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="userDetailsService">
+			<password-encoder ref="passwordEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+	<beans:bean class="org.springframework.security.crypto.password.StandardPasswordEncoder" id="passwordEncoder">
+        <beans:constructor-arg>
+			<beans:value>SWE681_CHECKERS_PSSWD_SALTER_MMMM_SALT!</beans:value>
+		</beans:constructor-arg>
+	</beans:bean>
+	
+</beans:beans>   
