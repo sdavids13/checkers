@@ -14,7 +14,7 @@ Final project for SWE 681 demonstrating secure software practices
 ### Local H2 Database ###
 You can navigate to the database console by accessing `localhost:8080/checkers/admin/h2`
 
-Driver Class: org.h2.Driver
-JDBC URL: jdbc:h2:file:~/CheckersLocalPersistence
-User Name: sa
-Password: '' (Blank password)
+* Driver Class: org.h2.Driver
+* JDBC URL: jdbc:h2:file:~/CheckersLocalPersistence
+* User Name: sa
+* Password: '' (Blank password)
