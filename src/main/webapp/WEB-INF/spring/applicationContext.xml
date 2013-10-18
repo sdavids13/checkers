@@ -32,7 +32,7 @@
 			<bean class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
 				<property name="config">
 					<bean class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
-						<property name="algorithm" value="PBEWithMD5AndDES" />
+						<property name="algorithm" value="PBEWITHSHA1ANDDESEDE" />
 						<property name="password" value="SWE681_CHECKERS_PROPERTY_ENCRYPTOR" />
 					</bean>
 				</property>

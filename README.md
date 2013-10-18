@@ -16,5 +16,5 @@ You can navigate to the database console by accessing `localhost:8080/checkers/a
 
 * Driver Class: org.h2.Driver
 * JDBC URL: jdbc:h2:file:~/CheckersLocalPersistence
-* User Name: sa
-* Password: '' (Blank password)
+* User Name: user
+* Enter password...
