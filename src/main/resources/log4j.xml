@@ -5,15 +5,15 @@
 
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Threshold" value="DEBUG" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n %throwable{short}" />
 		</layout>
 	</appender>
 
 	<appender name="ROLL" class="org.apache.log4j.RollingFileAppender">
 		<param name="Threshold" value="DEBUG" />
 		<param name="File" value="system.log" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
 		</layout>
 	</appender>
@@ -21,7 +21,7 @@
 	<appender name="PERF" class="org.apache.log4j.RollingFileAppender">
 		<param name="Threshold" value="DEBUG" />
 		<param name="File" value="perf.log" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
 		</layout>
 	</appender>
@@ -29,7 +29,7 @@
 	<appender name="ERROR" class="org.apache.log4j.RollingFileAppender">
 		<param name="Threshold" value="ERROR" />
 		<param name="File" value="error.log" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
 		</layout>
 	</appender>
