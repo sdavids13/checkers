@@ -237,8 +237,7 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.1</version>
 				<configuration>
-					<!-- Setting HTTP listening port to 0 is temporary kludge to force use of HTTPS -->
-					<port>0</port>  
+					<port>8080</port>  
 					<httpsPort>8443</httpsPort>
                 	<keystoreFile>${basedir}/src/main/resources/certificates/keystore.jks</keystoreFile>
                 	<keystorePass>password</keystorePass>

@@ -64,7 +64,6 @@
 		<url-pattern>/admin/h2/*</url-pattern>
 	</servlet-mapping>
 	
-	<!-- SETUP ONCE CONTAINTER HAS SSL SUPPORT
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>checkers</web-resource-name>
@@ -74,5 +73,4 @@
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
-	 -->
 </web-app>
