@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -74,6 +76,11 @@ public class User implements Comparable<User>, UserDetails {
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+	    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
 }
