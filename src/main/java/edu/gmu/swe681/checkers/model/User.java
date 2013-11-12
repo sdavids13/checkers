@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
@@ -83,4 +85,20 @@ public class User implements Comparable<User>, UserDetails {
 	    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		} else if (obj == this) {
+			return true;
+		} else if (obj.getClass() != getClass()) {
+			return false;
+		}
+		
+		return StringUtils.equals(getUsername(), ((User) obj).getUsername());
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(getUsername()).toHashCode();
+	}
 }
