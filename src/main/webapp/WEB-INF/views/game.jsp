@@ -4,12 +4,14 @@
 	<spring:url value="/resources/js/board.js" var="board" />
 	<spring:url value="/resources/js/uct.js" var="uct" />
 	<spring:url value="/resources/js/canvasui.js" var="canvasui" />
+	<spring:url value="/resources/js/jquery-2.0.3.min.js" var="jquery" />
 
 </head>
 
 <script src="${board}" ></script>
 <script src="${uct}" ></script>
 <script src="${canvasui}"></script>
+<script src="${jquery}"></script>
 
 <body>
 	<jsp:include page="menu.jsp" flush="true" />

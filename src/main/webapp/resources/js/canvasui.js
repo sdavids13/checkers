@@ -199,10 +199,10 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 		}
 
 		$.ajax({
-			url : "/checkers/cont/person",
+			url : "/checkers/move/piece",   // TODO: need to pass "/checkers/${game}/move"
 			type : 'POST',
 			dataType : 'json',
-			data : "{\"name\":\"hmkcode\",\"id\":2}",
+			data : "{\"row\":\"1\",\"col\":2}",
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			//async : false, // Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
@@ -210,7 +210,7 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 			//processData : false, // To avoid making query String instead of JSON
 
 			success : function(data) {
-				console.debug(data.id + " " + data.name);
+				console.debug(data.row + " " + data.col);
 
 				// Try to move. If it's not valid, redraw.
 				try {
