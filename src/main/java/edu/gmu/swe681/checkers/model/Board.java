@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 public class Board {
 
 	private static Logger LOG = LoggerFactory.getLogger(Board.class);
+	 /** System property - <tt>line.separator</tt>*/
+  public static final String NEW_LINE = System.getProperty("line.separator");
 	
 	@Id
 	@GeneratedValue
@@ -61,15 +63,16 @@ public class Board {
 		board.prevPlayerMove = Player.RED;
 		
 		Set<Piece> pieces = new HashSet<Piece>();
-		for(int x = 0; x < 8; x++) {
-			for (int y = 0; y < 3; y++) {
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 8; x++) {
 				Coordinate coord = new Coordinate(x, y);
 				if(coord.isPlayable()) {
 					pieces.add(new Piece(Player.RED, coord));
 				}
 			}
-			
+		}
 			for (int y = 5; y < 8; y++) {
+				for (int x = 0; x < 8; x++) {
 				Coordinate coord = new Coordinate(x, y);
 				if(coord.isPlayable()) {
 					pieces.add(new Piece(Player.BLACK, coord));
@@ -170,5 +173,38 @@ public class Board {
 		Set<Piece> movedAndRemovedPieces = new HashSet<Piece>(collection);
 		movedAndRemovedPieces.removeAll(remove);
 		return movedAndRemovedPieces;
+	}
+	
+	/**
+	 * Visualization of board
+	 * @return - visualization of the Board (current state) 
+	 */
+	public String displayBoard() {
+		StringBuilder sB = new StringBuilder();
+
+		for (int y = 0; y < 8; y++) {
+			for(int x = 0; x < 8; x++) {
+				Piece piece = getPiece(new Coordinate(x, y));
+				if (piece != null) {
+					if (piece.getPlayer().equals(Player.BLACK)) {
+						if (piece.getKinged()) {
+							sB.append("|B|");
+						} else {
+							sB.append("|b|");
+						}
+					} else {
+						if (piece.getKinged()) {
+							sB.append("|R|");
+						} else {
+							sB.append("|r|");
+						}
+					}
+				} else {
+					sB.append("| |");
+				}
+			}
+			sB.append(NEW_LINE);
+		}
+		return sB.toString();
 	}
 }

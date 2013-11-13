@@ -1,11 +1,13 @@
 package edu.gmu.swe681.checkers.model;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 public class BoardTest {
@@ -41,4 +43,13 @@ public class BoardTest {
 		Board newBoard = board.buildNextBoard(nextBoardPieces);
 		assertEquals(movedPiece, newBoard.getMovedPiece());
 	}
+	
+	@Test
+	public void testDisplayBoard() {
+		Board gameBoard =  Board.buildInitialBoard();
+		String results = gameBoard.displayBoard();
+		System.out.println(results);
+		assertTrue(StringUtils.contains(results, "r"));		
+	}
+
 }
