@@ -9,27 +9,41 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/applicationContext.xml,/WEB-INF/spring/spring-security.xml</param-value>
 	</context-param>
-	
+
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
-	
+
 	<filter>
-    	<filter-name>springSecurityFilterChain</filter-name>
-   		 <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 
 	<filter-mapping>
- 		 <filter-name>springSecurityFilterChain</filter-name>
- 		 <url-pattern>/*</url-pattern>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>hibernateFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+		<init-param>
+			<param-name>singleSession</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>hibernateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
+
 	<listener>
-	    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 
 	<!-- Handles requests into the application -->
@@ -42,12 +56,12 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- H2 Database Console for managing the app's database -->
 	<servlet>
 		<servlet-name>H2Console</servlet-name>
@@ -63,7 +77,7 @@
 		<servlet-name>H2Console</servlet-name>
 		<url-pattern>/admin/h2/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>checkers</web-resource-name>

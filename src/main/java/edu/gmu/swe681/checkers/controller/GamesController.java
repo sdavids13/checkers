@@ -1,10 +1,6 @@
 package edu.gmu.swe681.checkers.controller;
 
 
-import org.slf4j.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
@@ -108,6 +104,18 @@ public class GamesController {
 		}
 		
 		return new ModelAndView("game", "game", game);
+	}
+	
+	@RequestMapping(value = "/{gameId}/history", method = RequestMethod.GET)
+	public ModelAndView getGame(@PathVariable("gameId") Long gameId, HttpServletResponse response) throws IOException {
+		
+		Game game = gameService.retrieve(gameId);
+		if(game.getWinner() == null) {
+			//TODO: UNCOMMENT WHEN DONE TESTING
+			//response.sendError(HttpServletResponse.SC_NOT_FOUND, "Game has not ended, not history available.");
+		}
+		
+		return new ModelAndView("history", "game", game);
 	}
 	
 	

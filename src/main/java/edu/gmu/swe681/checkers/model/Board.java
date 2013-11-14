@@ -160,6 +160,10 @@ public class Board {
 		return movedPiece;
 	}
 	
+	public Piece getPiece(int x, int y) {
+		return getPiece(new Coordinate(x, y));
+	}
+	
 	public Piece getPiece(Coordinate coord) {
 		for(Piece piece : getPieces()) {
 			if(piece.getCoordinate().equals(coord)) {
