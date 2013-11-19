@@ -137,6 +137,7 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 			result.toCol = (move) & 0xFF;
 		}
 
+		console.log("computer moves to row: " + result.toRow +", col: " + result.toCol);
 		// TODO: this portion need to be moved to server side.
 		var winner = game.move(result.fromRow, result.fromCol, result.toRow, result.toCol);
 
@@ -198,23 +199,34 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 			selectedCol = undefined;
 		}
 
+		var pathname = window.location.pathname
+		console.debug(pathname);
+		
+    var jsonCheckerPiece = {"fromRow" : fromRow, "fromCol": fromCol, "row" : row, "col" : col};
+    //TODO: submit entire checkerboard's current state + change    
+    // see: Board.prototype.coordToIndex = function (row, col) {  return (row << 3) + col; } 
+    // and Board.prototype.initPiece = function (row, col, key, player) - lines 63-80   
+    console.debug(game.board);
+    
 		$.ajax({
-			url : "/checkers/move/piece",   // TODO: need to pass "/checkers/${game}/move"
+			url : '/checkers' + '/move/piece',
 			type : 'POST',
 			dataType : 'json',
-			data : "{\"row\":\"1\",\"col\":2}",
+			data : JSON.stringify(jsonCheckerPiece),  
 			contentType : 'application/json',
 			mimeType : 'application/json',
-			//async : false, // Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
-			//cache : false, // This will force requested pages not to be cached by the browser
-			//processData : false, // To avoid making query String instead of JSON
-
 			success : function(data) {
-				console.debug(data.row + " " + data.col);
+				console.debug(JSON.stringify(data));
 
 				// Try to move. If it's not valid, redraw.
+				if (!data.isMoveValid) {
+					alert('Invalid move: ' + JSON.stringify(data));
+					Draw(game.board, selectedRow, selectedCol);
+					return;
+				} 
+				
 				try {
-					var winner = game.move(fromRow, fromCol, row, col);
+					var winner = game.move(data.fromRow, data.fromCol, data.row, data.col);
 					if (winner) {
 						var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
 						alert(color + " player wins! Refresh to play again.");
@@ -239,11 +251,12 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 
 				// Otherwise, draw and let the computer make a move.
 				if (computer)
-					setTimeout(computerPlay, 400);
+					setTimeout(computerPlay, 400);  //TODO: another ajax call here?
 
 			},
 			error : function(data, status, er) {
 				console.error("error: " + data + " status: " + status + " er:" + er);
+				Draw(game.board, selectedRow, selectedCol);
 			}
 		});
 
