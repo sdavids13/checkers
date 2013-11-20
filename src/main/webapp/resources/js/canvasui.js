@@ -152,7 +152,7 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 			setTimeout(computerPlay, 400);
 	}
 	
-	var displayCheckerBoardAscii = function()  {
+	var displayCheckerBoardAscii = function()  {	
 		var resultString ="";
 		for (row=0; row < game.board.rows; row++) {
 			for (col=0; col < game.board.cols; col++) {
