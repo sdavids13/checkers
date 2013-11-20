@@ -18,8 +18,8 @@
 	<div class="container">
 		<h2>Checkers</h2>
 		<p>
-			<strong id='red' style='color: red'>Red: you!</strong><br />
-			<strong id='blue' style='color: blue'>Blue: Your Opponent</strong><br />
+			<strong id='red' style='color: red'>Red: ${game.firstPlayer.username}</strong><br />
+			<strong id='blue' style='color: blue'>Blue: ${game.secondPlayer.username} </strong><br>
 			Rules are <a href="http://en.wikipedia.org/wiki/English_draughts">here</a>.
 		</p>
 		<canvas id="checkers"></canvas>
