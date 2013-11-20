@@ -122,12 +122,12 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 
 		var result;
 		if (moves.length > 1) {
-			predictor.innerHTML = 'thinking...';
+			//predictor.innerHTML = 'thinking...';
 			result = game.suggest(3000);
 			var seconds = result.elapsed / 1000;
 			var nPerSec = result.playouts / seconds;
 
-			predictor.innerHTML = Math.floor(nPerSec) + "/sec";
+			//predictor.innerHTML = Math.floor(nPerSec) + "/sec";
 		} else {
 			move = moves.list[0];
 			result = {}
