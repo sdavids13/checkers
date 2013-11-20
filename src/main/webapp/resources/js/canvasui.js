@@ -151,6 +151,42 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 		if (game.inMultiTurn())
 			setTimeout(computerPlay, 400);
 	}
+	
+	var displayCheckerBoardAscii = function()  {
+		var resultString ="";
+		for (row=0; row < game.board.rows; row++) {
+			for (col=0; col < game.board.cols; col++) {
+				var pos = row * game.board.cols + col;
+				var piece = game.board.grid[pos];  
+				var key = (piece >> 8) & 0xFF;
+				var player = piece & 0x3;
+				var isKing = piece & 0x4;
+				var display ="";
+				
+				if (isKing) {
+					if (player == 2) {
+						display = "R";
+					} else if (player == 3){
+						display = "B";
+					} else {
+						display =" ";
+					}
+				} else {
+					if (player == 2) {
+						display = "r";
+					} else if (player == 3){
+						display = "b";
+					} else {
+						display = " ";
+					}
+				}
+				  
+				resultString += display;
+			}
+			resultString += "\n";
+		}
+		return resultString;
+	}
 
 	var onClick = function(e) {
 		var x, y;
@@ -206,7 +242,14 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
     //TODO: submit entire checkerboard's current state + change    
     // see: Board.prototype.coordToIndex = function (row, col) {  return (row << 3) + col; } 
     // and Board.prototype.initPiece = function (row, col, key, player) - lines 63-80   
-    console.debug(game.board);
+    //console.debug(game.board);
+    
+    var coordToIndexVal = game.board.coordToIndex(fromRow, fromCol);
+    console.debug("CoordToIndex result for row " +fromRow + " and col " + fromCol +": " + coordToIndexVal);
+    console.debug(game.board.grid[coordToIndexVal]);
+    console.debug(game.board.grid[75]);  //64+11 = 75
+    
+    console.debug(displayCheckerBoardAscii());
     
 		$.ajax({
 			url : '/checkers' + '/move/piece',
@@ -272,4 +315,5 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 		canvas.addEventListener("click", onClick, false);
 		Draw(game.board);
 	}
+
 }
