@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -22,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements Comparable<User>, UserDetails {
 
 	@Id
-	@Pattern(regexp="^[a-z0-9]{4,15}$", message="only lowercase alpha and numeric values accepted between 4 and 15 characters." )
 	@Column(nullable = false, unique = true, length = 20)
 	private String username;
 

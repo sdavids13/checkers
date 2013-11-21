@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import edu.gmu.swe681.checkers.dto.UserRegistration;
 import edu.gmu.swe681.checkers.model.User;
 import edu.gmu.swe681.checkers.service.UserService;
 
@@ -32,7 +33,7 @@ public class SignupController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getSignupForm() {
-		return new ModelAndView("signup", "user", new User());
+		return new ModelAndView("signup", "userRegistration", new UserRegistration());
 	}
 
 	/**
@@ -43,18 +44,22 @@ public class SignupController {
 	 * @return a redirected ModelAndView back to the Admin Portal
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView createNewUser(@Valid User user, BindingResult result) {
-		String username = user.getUsername();
+	public ModelAndView createNewUser(@Valid UserRegistration userRegistration, BindingResult result) {
+		String username = userRegistration.getUsername();
 		if (userService.getUser(username) != null) {
-			result.addError(new FieldError("user", "username",
+			result.addError(new FieldError("userRegistration", "username",
 				"'" + username + "' has already been registered, please use a different value."));
 		}
 
 		if (result.hasErrors()) {
-			return new ModelAndView("signup", "user", user);
+			return new ModelAndView("signup", "userRegistration", userRegistration);
 		}
+		
+		User newUser = new User();
+		newUser.setUsername(username);
+		newUser.setPassword(userRegistration.getPassword());
 
-		userService.save(user);
+		userService.save(newUser);
 		LOG.info("Created new user: " + username);
 		
 		return new ModelAndView(new RedirectView("/", true));

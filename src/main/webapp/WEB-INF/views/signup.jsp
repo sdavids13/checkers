@@ -11,7 +11,7 @@
 	<jsp:include page="menu.jsp" flush="true" />
 	
 	<div class="container">
-		<form:form cssClass="form-horizontal" commandName="user" method="post">
+		<form:form cssClass="form-horizontal" commandName="userRegistration" method="post">
 			<fieldset>
 				<legend>User Signup</legend>
 				
