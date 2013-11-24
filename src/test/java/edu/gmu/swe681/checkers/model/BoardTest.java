@@ -1,8 +1,6 @@
 package edu.gmu.swe681.checkers.model;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +14,7 @@ public class BoardTest {
 	@Test
 	public void testDetermineMovedPiece() {
 		Board board = Board.buildInitialBoard();
-		Coordinate blackPieceCoord = new Coordinate(1, 5);
+		Coordinate blackPieceCoord = new Coordinate(1, 6);
 		Piece blackPiece = board.getPiece(blackPieceCoord);
 		
 		assertEquals(Player.BLACK, blackPiece.getPlayer());

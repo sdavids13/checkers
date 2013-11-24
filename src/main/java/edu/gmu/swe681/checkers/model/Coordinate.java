@@ -57,7 +57,7 @@ public class Coordinate {
 	}
 	
 	protected static boolean isPlayable(Coordinate coord) {
-		return (coord.x + coord.y) %2 == 0;
+		return (coord.x + coord.y) %2 != 0;
 	}
 	
 	@Override
