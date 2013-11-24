@@ -25,11 +25,9 @@
 		<canvas id="checkers"></canvas>
 		<script>
 			var canvas = document.getElementById('checkers');
-			var predictor = document.getElementById('predictor');
-			var ui = new CanvasCheckers(canvas, predictor, 8, 8);
+			var ui = new CanvasCheckers(canvas, 8, 8);
 			var game = new Checkers.Game(ui);
 			game.start();
-	
 		</script>
 		<hr>
 	</div>
