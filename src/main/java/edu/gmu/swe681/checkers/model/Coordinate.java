@@ -35,6 +35,22 @@ public class Coordinate {
 		this.y = y;
 	}
 	
+	public Integer getX() {
+		return x;
+	}
+
+	public void setX(Integer x) {
+		this.x = x;
+	}
+
+	public Integer getY() {
+		return y;
+	}
+
+	public void setY(Integer y) {
+		this.y = y;
+	}
+
 	@AssertTrue(message = "a piece is in an unplayable spot")
 	public boolean isPlayable() {
 		return isPlayable(this);
