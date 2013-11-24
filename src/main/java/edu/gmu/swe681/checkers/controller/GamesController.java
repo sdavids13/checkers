@@ -100,7 +100,7 @@ public class GamesController {
 		
 		Game game = gameService.retrieve(gameId);
 		if(!game.hasPlayer(user)) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not apart of this game.");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
 		}
 		
 		return new ModelAndView("game", "game", game);
