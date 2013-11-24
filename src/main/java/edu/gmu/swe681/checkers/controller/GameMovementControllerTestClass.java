@@ -1,6 +1,7 @@
 package edu.gmu.swe681.checkers.controller;
 
 import java.io.Serializable;
+import java.util.*;
 
 import org.apache.commons.lang3.builder.*;
 import org.slf4j.*;
@@ -8,7 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import edu.gmu.swe681.checkers.model.User;
+import edu.gmu.swe681.checkers.model.*;
+
+
 
 @Controller
 @RequestMapping("/move")
@@ -22,90 +25,73 @@ public class GameMovementControllerTestClass {
 	 */
 	@RequestMapping(value = "piece", method = RequestMethod.POST)
 	public @ResponseBody 
-	Piece post(@RequestBody final Piece piece) {
+	MyPieces post(@RequestBody MyPieces pieces) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String userName = user.getUsername();	
-		LOG.debug(userName + " moved piece from row/col " + piece.getFromRow() +  "," + piece.getFromCol() + " to row/col " + piece.getRow() + "," + piece.getCol()); 
+		LOG.debug("userName: " + user.getUsername());
+		MyPieces myPieces = pieces;
+		
+		//KLUDGE to convert from edu.gmu.swe681.checkers.controller.Piece to edu.gmu.swe681.checkers.model.Piece
+		
 		
 		//TODO: validate whether move is correct.
-		Boolean isMoveValid = true;
+		//Boolean isMoveValid = true;
 		//TODO: determine if the user *needs* to continue making moves - if you can jump, you must.
-		Boolean multiMove = false;
+		//Boolean multiMove = false;
+		//TODO: determine if multimove
+		//piece.setMultiMoveState(multiMove);	
+		//piece.setIsMoveValid(isMoveValid);
 		
-		
-		piece.setMultiMoveState(multiMove);
-		piece.setIsMoveValid(isMoveValid);
-		
-		return piece;
+		return pieces;
 	}
 
 	public static class Piece implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		private int fromRow;
-		private int fromCol;
-		private int row;
-		private int col;
-
-		private Boolean multiMoveState;
-		private Boolean isMoveValid;
-
-		public int getRow() {
-			return row;
-		}
-
-		public void setRow(int row) {
-			this.row = row;
-		}
-
-		public int getCol() {
-			return col;
-		}
+		private static final long serialVersionUID = -4638399735364352423L;
+		private String player;
+		private String kinged;
+		private Coordinate coordinate;
 		
-		public void setCol(int col) {
-			this.col = col;
+		public Piece() {
+			// do nothing
+		}
+		public Piece(String kinged, String player, Coordinate coordinate) {
+			this.player=player;
+			this.kinged = kinged;
+			this.coordinate = coordinate;
 		}
 
-		public void getCol(int col) {
-			this.col = col;
+		public String getPlayer() {
+			return player;
 		}
-		public int getFromRow() {
-			return fromRow;
+		public void setPlayer(String player) {
+			this.player = player;
 		}
-
-		public void setFromRow(int fromRow) {
-			this.fromRow = fromRow;
+		public String getKinged() {
+			return kinged;
 		}
-
-		public int getFromCol() {
-			return fromCol;
+		public void setKinged(String kinged) {
+			this.kinged = kinged;
 		}
-
-		public void setFromCol(int fromCol) {
-			this.fromCol = fromCol;
+		public Coordinate getCoordinate() {
+			return coordinate;
 		}
-		
-		public Boolean getMultiMoveState() {
-			return multiMoveState;
+		public void setCoordinate(Coordinate coordinate) {
+			this.coordinate = coordinate;
 		}
-
-		public void setMultiMoveState(Boolean multiMoveState) {
-			this.multiMoveState = multiMoveState;
-		}
-
-		public Boolean getIsMoveValid() {
-			return isMoveValid;
-		}
-
-		public void setIsMoveValid(Boolean isMoveValid) {
-			this.isMoveValid = isMoveValid;
-		}
-
-
 		
 		@Override
 		public String toString() {
 		    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
 	}
+	
+	public static class MyPieces extends ArrayList<Piece> {
+		private static final long serialVersionUID = 5512940473318587536L;
+
+		@Override
+		public String toString() {
+		    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		}
+		
+	}
+	
 }

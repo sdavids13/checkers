@@ -25,7 +25,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-function CanvasCheckers(canvas, predictor, rows, cols) {
+function CanvasCheckers(canvas, rows, cols) {
 	this.rows = rows;
 	this.cols = cols;
 	var computer = Checkers.PlayerTwo;
@@ -122,12 +122,9 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 
 		var result;
 		if (moves.length > 1) {
-			//predictor.innerHTML = 'thinking...';
 			result = game.suggest(3000);
 			var seconds = result.elapsed / 1000;
 			var nPerSec = result.playouts / seconds;
-
-			//predictor.innerHTML = Math.floor(nPerSec) + "/sec";
 		} else {
 			move = moves.list[0];
 			result = {}
@@ -152,7 +149,9 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 			setTimeout(computerPlay, 400);
 	}
 	
-	var displayCheckerBoardAscii = function()  {	
+	var getBoardStateBeforeMove = function()  {
+		jsonObj = [];
+		
 		var resultString ="";
 		for (row=0; row < game.board.rows; row++) {
 			for (col=0; col < game.board.cols; col++) {
@@ -180,12 +179,17 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 						display = " ";
 					}
 				}
+
+				coordinate = {"x" : row, "y" : col};
+				piece ={"player" : player,"kinged" : isKing, "coordinate" : coordinate};
+				jsonObj.push(piece);
 				  
 				resultString += display;
 			}
 			resultString += "\n";
 		}
-		return resultString;
+		console.debug(resultString);
+		return jsonObj;
 	}
 
 	var onClick = function(e) {
@@ -237,39 +241,19 @@ function CanvasCheckers(canvas, predictor, rows, cols) {
 
 		var pathname = window.location.pathname
 		console.debug(pathname);
-		
-    var jsonCheckerPiece = {"fromRow" : fromRow, "fromCol": fromCol, "row" : row, "col" : col};
-    //TODO: submit entire checkerboard's current state + change    
-    // see: Board.prototype.coordToIndex = function (row, col) {  return (row << 3) + col; } 
-    // and Board.prototype.initPiece = function (row, col, key, player) - lines 63-80   
-    //console.debug(game.board);
-    
-    var coordToIndexVal = game.board.coordToIndex(fromRow, fromCol);
-    console.debug("CoordToIndex result for row " +fromRow + " and col " + fromCol +": " + coordToIndexVal);
-    console.debug(game.board.grid[coordToIndexVal]);
-    console.debug(game.board.grid[75]);  //64+11 = 75
-    
-    console.debug(displayCheckerBoardAscii());
     
 		$.ajax({
 			url : '/checkers' + '/move/piece',
 			type : 'POST',
 			dataType : 'json',
-			data : JSON.stringify(jsonCheckerPiece),  
+			data : JSON.stringify(getBoardStateBeforeMove()),  
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			success : function(data) {
 				console.debug(JSON.stringify(data));
-
-				// Try to move. If it's not valid, redraw.
-				if (!data.isMoveValid) {
-					alert('Invalid move: ' + JSON.stringify(data));
-					Draw(game.board, selectedRow, selectedCol);
-					return;
-				} 
 				
 				try {
-					var winner = game.move(data.fromRow, data.fromCol, data.row, data.col);
+					var winner = game.move(fromRow, fromCol, row, col);
 					if (winner) {
 						var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
 						alert(color + " player wins! Refresh to play again.");
