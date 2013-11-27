@@ -1,21 +1,15 @@
 package edu.gmu.swe681.checkers.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.*;
+import org.slf4j.*;
 
 @Entity
 public class Piece {
+	private static Logger LOG = LoggerFactory.getLogger(Piece.class);
 
 	@Id
 	@GeneratedValue//(strategy = GenerationType.SEQUENCE)
@@ -43,6 +37,27 @@ public class Piece {
 		this.coordinate = coord;
 	}
 	
+	public Piece(String player, Coordinate coord) {
+		setPlayer(player);
+		setCoordinate(coord);
+	}
+	
+	public Piece(String kinged, String player, Coordinate coordinate) {
+		setKinged(kinged);
+		setPlayer(player);
+		this.coordinate = coordinate;
+	}
+	
+	public void setPlayer(String player) {
+		//TODO: add field to Enum to base String arg match against
+		try {
+		Integer playerInt = Integer.parseInt(player);
+			this.player =  playerInt == 2 ? Player.RED : Player.BLACK; 
+		} catch (NumberFormatException e) {
+			LOG.warn("trouble", e);
+		}
+	}
+		
 	public Player getPlayer() {
 		return player;
 	}
@@ -50,15 +65,22 @@ public class Piece {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-
-	public Boolean getKinged() {
-		return kinged;
-	}
-
+	
 	public void setKinged(Boolean kinged) {
 		this.kinged = kinged;
 	}
 
+	public Boolean getKinged() {
+		return kinged;
+	}
+	
+	public void setKinged(String kinged) {
+		if (StringUtils.isEmpty(kinged)) {
+			LOG.warn("kinged arg is empty");
+			return;
+		}
+		this.kinged = Boolean.parseBoolean(kinged);
+	}
 	public Coordinate getCoordinate() {
 		return coordinate;
 	}
@@ -83,7 +105,7 @@ public class Piece {
 	
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
-	
+
 }

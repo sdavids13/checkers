@@ -184,7 +184,7 @@ public class Board {
 	 * @return - visualization of the Board (current state) 
 	 */
 	public String displayBoard() {
-		StringBuilder sB = new StringBuilder();
+		StringBuilder sB = new StringBuilder(NEW_LINE);
 
 		for (int y = 0; y < 8; y++) {
 			for(int x = 0; x < 8; x++) {

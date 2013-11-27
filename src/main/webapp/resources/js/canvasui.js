@@ -149,7 +149,7 @@ function CanvasCheckers(canvas, rows, cols) {
 			setTimeout(computerPlay, 400);
 	}
 	
-	var getBoardStateBeforeMove = function()  {
+	var getBoardState = function()  {
 		jsonObj = [];
 		
 		var resultString ="";
@@ -180,7 +180,8 @@ function CanvasCheckers(canvas, rows, cols) {
 					}
 				}
 
-				coordinate = {"x" : row, "y" : col};
+				//coordinate = {"x" : row, "y" : col};  //the "view" way
+				coordinate = {"x" : col, "y" : row};    // the "swe681.checkers.model.Coordinate" way
 				piece ={"player" : player,"kinged" : isKing, "coordinate" : coordinate};
 				jsonObj.push(piece);
 				  
@@ -240,24 +241,32 @@ function CanvasCheckers(canvas, rows, cols) {
 		}
 
 		var pathname = window.location.pathname
-		console.debug(pathname);
+		var boardStatePriorToMove = getBoardState();
+		var winner = null;
+		try {
+			 winner = game.move(fromRow, fromCol, row, col);
+		} catch (e) {
+				alert('Invalid move: ' + e);
+				Draw(game.board, selectedRow, selectedCol);
+				return;
+		}
+		var boardStateAfterMove = getBoardState();
     
 		$.ajax({
 			url : '/checkers' + '/move/piece',
 			type : 'POST',
 			dataType : 'json',
-			data : JSON.stringify(getBoardStateBeforeMove()),  
+			data : JSON.stringify(boardStateAfterMove),  
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			success : function(data) {
-				console.debug(JSON.stringify(data));
+				//console.debug(JSON.stringify(data));
 				
 				try {
-					var winner = game.move(fromRow, fromCol, row, col);
 					if (winner) {
 						var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
 						alert(color + " player wins! Refresh to play again.");
-						return;
+							return;
 					}
 				} catch (e) {
 					alert('Invalid move: ' + e);
