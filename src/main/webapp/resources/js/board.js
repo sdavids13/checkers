@@ -113,7 +113,6 @@ var Checkers = {
 
         Board.prototype.coordToIndex = function (row, col) {
             return (row << 3) + col;
-            //return row * this.cols + col;
         }
 
         Board.prototype.opponent = function () {
@@ -126,8 +125,10 @@ var Checkers = {
 
         Board.prototype.validateMove = function (fromRow, fromCol, toRow, toCol) {
             // Source piece must be the current player.
-            if (this.getPlayer(fromRow, fromCol) != this.player)
-                throw "piece is not yours";
+        	
+        		//TODO: re-enable commented-out section below after we set correct playerId
+            /*if (this.getPlayer(fromRow, fromCol) != this.player)   
+                throw "piece is not yours";*/
 
             // Destination cannot have a filled square.
             if (this.getPiece(toRow, toCol))
@@ -430,6 +431,22 @@ var Checkers = {
         this.suggest = function (maxTime) {
             return UCT(this.board, maxTime);
         }
+        
+        /*
+         * Populates the game board based on the array of {player: playerid, Coordinate {row: row, col: col}} objs
+         */
+        Board.prototype.populateFromArray = function (array) {
+          game.board.clear();
+          
+          var key = 0;
+          array.forEach( function(s) {
+          	if (s.player != 0) {
+          		game.board.initPiece(s.coordinate.y, s.coordinate.x, key, s.player);
+          		//TODO: update piece to king if it's a king
+          		key++;
+          	}
+          });
+        }
 
         this.board = new Board();
         this.board.init();
@@ -439,4 +456,3 @@ var Checkers = {
         }
     }
 };
-

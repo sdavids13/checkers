@@ -211,14 +211,18 @@ function CanvasCheckers(canvas, rows, cols) {
 		var col = Math.floor(x / PieceWidth);
 
 		// Don't let the player move during the computer's turn.
-		if (game.player() == computer)
-			return;
+		
+		//TODO: re-factor to prevent player2 from playing during player3's turn, or vice-versa 
+		/*if (game.player() == computer)
+			return;*/
 
 		var player = game.playerAt(row, col);
 		if (player) {
-			if (player != game.player())
-				return;
-
+			
+				//TODO: disabled to allow movement of both blue and red pieces
+/*			if (player != game.player())
+				return;  
+*/
 			// If the player is selecting an own piece, just update the display.
 			if (!game.inMultiTurn()) {
 				selectedRow = row;
@@ -260,10 +264,15 @@ function CanvasCheckers(canvas, rows, cols) {
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			success : function(data) {
-				//console.debug(JSON.stringify(data));
+				var dataAsString = JSON.stringify(data);
+				var as = JSON.parse(dataAsString);  //array containing the player pieces and their placement
+			
+				//TESTING
+				game.board.populateFromArray(as);
 				
-				try {
-					if (winner) {
+					//TODO: disabled because server should make determination about winner and invalid moves
+/*				try {
+					if (winner) {  // TODO: shift winner determination to server
 						var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
 						alert(color + " player wins! Refresh to play again.");
 							return;
@@ -273,22 +282,24 @@ function CanvasCheckers(canvas, rows, cols) {
 					Draw(game.board, selectedRow, selectedCol);
 					return;
 				}
-
+*/
+				//TODO: disabled multi-move check
 				// The move was valid. If the player is allowed to move again,
 				// re-select the piece and redraw.
-				if (game.inMultiTurn()) {
+/*				if (game.inMultiTurn()) {
 					selectedRow = row;
 					selectedCol = col;
 					Draw(game.board, row, col);
 					return;
 				}
-
+*/
 				Draw(game.board);
-
+				
+				//TODO: refactor for 2 player use
 				// Otherwise, draw and let the computer make a move.
-				if (computer)
-					setTimeout(computerPlay, 400);  //TODO: another ajax call here?
-
+/*				if (computer)
+					setTimeout(computerPlay, 400); 
+*/
 			},
 			error : function(data, status, er) {
 				console.error("error: " + data + " status: " + status + " er:" + er);
