@@ -442,7 +442,14 @@ var Checkers = {
           array.forEach( function(s) {
           	if (s.player != 0) {
           		game.board.initPiece(s.coordinate.y, s.coordinate.x, key, s.player);
-          		//TODO: update piece to king if it's a king
+          		//update piece to king if it's a king
+          		if (s.kinged !=0) {
+          			var fromIndex = game.board.coordToIndex(s.coordinate.y, s.coordinate.x);
+          			var piece = game.board.grid[fromIndex];
+          			// King me!
+          			piece |= 4;
+          			game.board.grid[fromIndex] = piece;
+          		}
           		key++;
           	}
           });
