@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page import="edu.gmu.swe681.checkers.model.Coordinate" %>
 <html>
 <head>
 	<jsp:include page="header.jsp" flush="true" />
@@ -11,16 +12,19 @@
 	<div class="container">
 		
 		<h2>Game</h2>
+		<c:forEach items="${game.history}" var="board">
+		<h3>${board.prevPlayerMove} Move</h3>
 		<table class="board">
-			<c:forEach begin="0" end="7" var="yOffset">
-				<c:set var="y" value="${7 - yOffset}"/> 
+			<c:forEach begin="0" end="7" var="y">
 				<tr>
 				<c:forEach begin="0" end="7" var="x" >
-				
-					
-					<c:set var="cellCls" value="${(x + y) % 2 == 0 ? 'playable' : ''}"/>
+					<%
+						Coordinate coord = new Coordinate((Integer) pageContext.getAttribute("x"), (Integer) pageContext.getAttribute("y"));
+						pageContext.setAttribute("coord", coord);
+					%>
+					<c:set var="cellCls" value="${coord.playable ? 'playable' : ''}"/>
 					<td class="${cellCls}" x="${x}" y="${y}">
-						<c:set var="piece" value="${game.board.getPiece(x,y)}"/>
+						<c:set var="piece" value="${board.getPiece(coord)}"/>
 						<c:if test="${not empty piece}">
 						    <c:set var="pieceCls" value="piece ${piece.player.toString()}"/>
 						    <c:if test="${piece.kinged}">
@@ -34,6 +38,7 @@
 				</tr>
 			</c:forEach>
 		</table>
+		</c:forEach>
 	</div>
 	
 	<br/>

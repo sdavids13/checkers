@@ -1,11 +1,20 @@
 package edu.gmu.swe681.checkers.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.*;
-import org.slf4j.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 public class Piece {
@@ -33,29 +42,14 @@ public class Piece {
 	}
 	
 	public Piece(Player player, Coordinate coord) {
-		this.player = player;
-		this.coordinate = coord;
-	}
-	
-	public Piece(String player, Coordinate coord) {
 		setPlayer(player);
 		setCoordinate(coord);
 	}
 	
-	public Piece(String kinged, String player, Coordinate coordinate) {
+	public Piece(Boolean kinged, Player player, Coordinate coordinate) {
 		setKinged(kinged);
 		setPlayer(player);
 		this.coordinate = coordinate;
-	}
-	
-	public void setPlayer(String player) {
-		//TODO: add field to Enum to base String arg match against
-		try {
-		Integer playerInt = Integer.parseInt(player);
-			this.player =  playerInt == 2 ? Player.RED : Player.BLACK; 
-		} catch (NumberFormatException e) {
-			LOG.warn("trouble", e);
-		}
 	}
 		
 	public Player getPlayer() {
@@ -74,13 +68,6 @@ public class Piece {
 		return kinged;
 	}
 	
-	public void setKinged(String kinged) {
-		if (StringUtils.isEmpty(kinged)) {
-			LOG.warn("kinged arg is empty");
-			return;
-		}
-		this.kinged = Boolean.parseBoolean(kinged);
-	}
 	public Coordinate getCoordinate() {
 		return coordinate;
 	}

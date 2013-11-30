@@ -182,8 +182,10 @@ function CanvasCheckers(canvas, rows, cols) {
 
 				//coordinate = {"x" : row, "y" : col};  //the "view" way
 				coordinate = {"x" : col, "y" : row};    // the "swe681.checkers.model.Coordinate" way
-				piece ={"player" : player,"kinged" : isKing, "coordinate" : coordinate};
-				jsonObj.push(piece);
+				if(player == 2 || player == 3) {
+					piece ={"player" : player == 2 ? "RED" : "BLACK","kinged" : new Boolean(isKing), "coordinate" : coordinate};
+					jsonObj.push(piece);
+				}
 				  
 				resultString += display;
 			}
@@ -257,7 +259,7 @@ function CanvasCheckers(canvas, rows, cols) {
 		var boardStateAfterMove = getBoardState();
     
 		$.ajax({
-			url : '/checkers' + '/move/piece',
+			url : location.pathname + '/move',
 			type : 'POST',
 			dataType : 'json',
 			data : JSON.stringify(boardStateAfterMove),  

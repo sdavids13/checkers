@@ -60,21 +60,21 @@ public class Board {
 	public static Board buildInitialBoard() {
 		Board board = new Board();
 		//Black is the first player of the game
-		board.prevPlayerMove = Player.RED;
+		board.prevPlayerMove = Player.BLACK;
 		
 		Set<Piece> pieces = new HashSet<Piece>();
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 8; x++) {
 				Coordinate coord = new Coordinate(x, y);
-				if(coord.isPlayable()) {
+				if (coord.isPlayable()) {
 					pieces.add(new Piece(Player.RED, coord));
 				}
 			}
 		}
-			for (int y = 5; y < 8; y++) {
-				for (int x = 0; x < 8; x++) {
+		for (int y = 5; y < 8; y++) {
+			for (int x = 0; x < 8; x++) {
 				Coordinate coord = new Coordinate(x, y);
-				if(coord.isPlayable()) {
+				if (coord.isPlayable()) {
 					pieces.add(new Piece(Player.BLACK, coord));
 				}
 			}
@@ -114,6 +114,15 @@ public class Board {
 		}
 		
 		LOG.info("Moved piece: " + movedPiece + " and removed pieces: " + removedPieces);
+		
+		Set<Piece> movedTo = removeAll(newBoardLayout, this.pieces);
+		if(movedTo.size() != 1) {
+			throw new IllegalArgumentException("Invalid number of movements detected!");
+		}
+		
+		Set<Piece> boardUnion = removeAll(this.pieces, movedAndRemovedPieces);
+		boardUnion.addAll(movedTo);
+		newBoard.setPieces(boardUnion);
 
 		//TODO walk chain to see if the movedPiece could jump all removedPieces + verify it landed in the spot that it says it does
 		
@@ -158,10 +167,6 @@ public class Board {
 	
 	public Piece getMovedPiece() {
 		return movedPiece;
-	}
-	
-	public Piece getPiece(int x, int y) {
-		return getPiece(new Coordinate(x, y));
 	}
 	
 	public Piece getPiece(Coordinate coord) {

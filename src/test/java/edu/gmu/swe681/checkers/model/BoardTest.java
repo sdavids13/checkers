@@ -14,17 +14,17 @@ public class BoardTest {
 	@Test
 	public void testDetermineMovedPiece() {
 		Board board = Board.buildInitialBoard();
-		Coordinate blackPieceCoord = new Coordinate(1, 6);
-		Piece blackPiece = board.getPiece(blackPieceCoord);
+		Coordinate redPieceCoord = new Coordinate(1, 2);
+		Piece redPiece = board.getPiece(redPieceCoord);
 		
-		assertEquals(Player.BLACK, blackPiece.getPlayer());
+		assertEquals(Player.RED, redPiece.getPlayer());
 		
 		Set<Piece> nextBoardPieces = new HashSet<Piece>(board.getPieces());
-		nextBoardPieces.remove(blackPiece);
-		nextBoardPieces.add(new Piece(blackPiece.getPlayer(), new Coordinate(0, 4)));
+		nextBoardPieces.remove(redPiece);
+		nextBoardPieces.add(new Piece(redPiece.getPlayer(), new Coordinate(0, 3)));
 		
 		Board newBoard = board.buildNextBoard(nextBoardPieces);
-		assertEquals(blackPiece, newBoard.getMovedPiece());
+		assertEquals(redPiece, newBoard.getMovedPiece());
 	}
 	
 	@Test

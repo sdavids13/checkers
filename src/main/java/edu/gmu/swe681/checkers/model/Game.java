@@ -47,12 +47,12 @@ public class Game {
 		this.blackPlayer = firstPlayer;
 	}
 	
-	public void setBoard(Board board) {
-		if(this.board != null) {
+	public void updateBoard(Board board) {
+		if(board != null) {
+			board.setGame(this);
 			this.history.add(board);
 		}
 		this.board = board;
-		this.board.setGame(this);
 	}
 
 	public Long getId() {
@@ -85,7 +85,7 @@ public class Game {
 		}
 		this.redPlayer = secondPlayer;
 		//this initiates the game
-		setBoard(Board.buildInitialBoard());
+		updateBoard(Board.buildInitialBoard());
 	}
 	
 	public User getSecondPlayer() {
