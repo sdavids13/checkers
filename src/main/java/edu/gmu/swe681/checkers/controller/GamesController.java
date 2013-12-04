@@ -109,7 +109,9 @@ public class GamesController {
 		User user = userService.retrieve(userPrincipal.getName());
 		
 		Game game = gameService.retrieve(gameId);
-		if(!game.hasPlayer(user)) {
+		if(game.getWinner() != null) {
+			return new ModelAndView(new RedirectView("/games/" + gameId + "/history", true));
+		} else if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
 			return null;
 		}

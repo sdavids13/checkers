@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="edu.gmu.swe681.checkers.model.Coordinate" %>
 <html>
 <head>
@@ -11,7 +12,8 @@
 	
 	<div class="container">
 		
-		<h2>Game</h2>
+		<h2>${game.firstPlayer.username} vs ${game.secondPlayer.username}</h2>
+		<p class="lead">Winner: ${game.winner.username}, Completed: <fmt:formatDate value="${game.board.prevMoveDate}" pattern="MMM dd YYYY @ hh:mm a" /></p>
 		<c:forEach items="${game.history}" var="board">
 		<h3>${board.prevPlayerMove} Move</h3>
 		<table class="board">
