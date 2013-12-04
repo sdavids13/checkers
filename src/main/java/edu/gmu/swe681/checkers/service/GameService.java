@@ -39,6 +39,10 @@ public class GameService extends BaseService<Game> {
 		return dao.getMyActiveGames(username);
 	}
 	
+	public List<Game> getMyCompletedGames(String username) {
+		return dao.getMyCompletedGames(username);
+	}
+	
 	@Scheduled(fixedDelay=60000)
 	public void forfeitAbandonedGames() {
 		LOG.info("Checking to see if there are any abandoned games that need to be forfeited.");

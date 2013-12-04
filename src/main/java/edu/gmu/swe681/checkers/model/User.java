@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,7 +29,13 @@ public class User implements Comparable<User>, UserDetails {
 	// when it persists the salted+hashed value (way to large of a value).
 	@Column(nullable = false, length = 100)
 	private String password;
-
+	
+	@Formula("select count(*) from game g where g.winner = username")
+	private int winCnt;
+	
+	@Formula("select count(*) from game g where g.winner is not null and g.winner != username and (g.black_player = username or g.red_player = username)")
+	private int lossCnt;
+	
 	@Override
 	public String getUsername() {
 		return username;
@@ -98,5 +105,13 @@ public class User implements Comparable<User>, UserDetails {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(getUsername()).toHashCode();
+	}
+	
+	public int getWinCount() {
+		return winCnt;
+	}
+	
+	public int getLossCount() {
+		return lossCnt;
 	}
 }

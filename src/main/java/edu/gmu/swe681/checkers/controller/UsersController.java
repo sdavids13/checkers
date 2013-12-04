@@ -10,26 +10,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.gmu.swe681.checkers.model.User;
+import edu.gmu.swe681.checkers.service.GameService;
 import edu.gmu.swe681.checkers.service.UserService;
 
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-	
+
 	private Logger LOG = LoggerFactory.getLogger(UsersController.class);
-	
+
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private GameService gameService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getCurrentUserProfile() {
 		return new ModelAndView("users", "users", userService.getAllUsers());
 	}
-	
+
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
 	public ModelAndView getProfile(@PathVariable("username") String username) {
 		User user = userService.getUser(username);
 		
-		return new ModelAndView("profile", "user", user);
+		ModelAndView mav = new ModelAndView("profile", "user", user);
+		mav.addObject("completedGames", gameService.getMyCompletedGames(username));
+
+		return mav;
 	}
 }
