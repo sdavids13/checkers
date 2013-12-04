@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,8 +68,10 @@ public class GamesController {
 		if(game.getSecondPlayer() != null){
 			//Stops processing at this point (throws exception)
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Game has already been joined by a second player.");
+			return null;
 		} else if (game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have already joined this game.");
+			return null;
 		}
 		
 		game.setSecondPlayer(user);
@@ -77,7 +80,6 @@ public class GamesController {
 		return new RedirectView("/games/" + gameId, true);
 	}
 	
-	//TODO: ROUGH GUESTIMATE -- DIDN'T TEST THIS PART YET
 	@RequestMapping(value = "/{gameId}/move", method = RequestMethod.POST)
 	public RedirectView joinGame(@PathVariable("gameId") Long gameId, @RequestBody @Valid List<Piece> pieces, Principal userPrincipal, HttpServletResponse response) throws IOException {
 		User user = userService.retrieve(userPrincipal.getName());
@@ -85,6 +87,13 @@ public class GamesController {
 		Game game = gameService.retrieve(gameId);
 		if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not apart of this game.");
+			return null;
+		} else if(game.getWinner() != null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The game is over, " + game.getWinner().getUsername() + " won.");
+			return null;
+		} else if(!game.isUserTurn(user)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "It's not your turn.");
+			return null;
 		}
 		
 		Board nextBoard = game.getBoard().buildNextBoard(new HashSet<Piece>(pieces));
@@ -102,6 +111,7 @@ public class GamesController {
 		Game game = gameService.retrieve(gameId);
 		if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
+			return null;
 		}
 		
 		return new ModelAndView("game", "game", game);
@@ -114,10 +124,14 @@ public class GamesController {
 		if(game.getWinner() == null) {
 			//TODO: UNCOMMENT WHEN DONE TESTING
 			//response.sendError(HttpServletResponse.SC_NOT_FOUND, "Game has not ended, not history available.");
+			//return null;
 		}
 		
 		return new ModelAndView("history", "game", game);
 	}
-	
-	
+
+	@ExceptionHandler
+	public void handleException(HttpServletResponse response, Exception ex) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+	}
 }

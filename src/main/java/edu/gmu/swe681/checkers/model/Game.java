@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
+import org.springframework.beans.factory.config.SetFactoryBean;
+
 @Entity
 public class Game {
 
@@ -44,7 +46,7 @@ public class Game {
 	}
 	
 	public Game(User firstPlayer) {
-		this.blackPlayer = firstPlayer;
+		this.redPlayer = firstPlayer;
 	}
 	
 	public void updateBoard(Board board) {
@@ -66,7 +68,7 @@ public class Game {
 	public User getBlackPlayer() {
 		return blackPlayer;
 	}
-
+	
 	public User getWinner() {
 		return winner;
 	}
@@ -83,17 +85,17 @@ public class Game {
 		if(hasPlayer(secondPlayer)) {
 			throw new IllegalArgumentException(String.format("The first user (%s) attempted to join the game as the second user.", secondPlayer.getUsername()));
 		}
-		this.redPlayer = secondPlayer;
+		this.blackPlayer = secondPlayer;
 		//this initiates the game
 		updateBoard(Board.buildInitialBoard());
 	}
 	
 	public User getSecondPlayer() {
-		return getRedPlayer();
+		return getBlackPlayer();
 	}
 	
 	public User getFirstPlayer() {
-		return getBlackPlayer();
+		return getRedPlayer();
 	}
 	
 	public boolean hasPlayer(User user) {
@@ -102,5 +104,36 @@ public class Game {
 		}
 		
 		return user.equals(getFirstPlayer()) || user.equals(getSecondPlayer());
+	}
+	
+	/**
+	 * Expire the game, give the win to the user that moved last.
+	 */
+	public void expireGame() {
+		if(board == null) {
+			throw new IllegalStateException("Unable to expire a game that hasn't started yet.");
+		}
+		
+		this.winner = getUser(getLastPlayer());
+	}
+
+	public boolean isUserTurn(User user) {
+		return user.equals(getUser(Player.otherPlayer(getLastPlayer())));
+	}
+	
+	private Player getLastPlayer() {
+		if(board == null) {
+			return null;
+		}
+		
+		return board.getPrevPlayerMove();
+	}
+	
+	public User getUser(Player player) {
+		if(player == null) {
+			return null;
+		}
+		
+		return player == Player.RED ? redPlayer : blackPlayer;
 	}
 }

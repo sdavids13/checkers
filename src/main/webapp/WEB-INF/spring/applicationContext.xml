@@ -18,6 +18,7 @@
    		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 
+	<task:annotation-driven />
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<aop:aspectj-autoproxy />
 

@@ -25,7 +25,7 @@ public class Board {
 
 	private static Logger LOG = LoggerFactory.getLogger(Board.class);
 	 /** System property - <tt>line.separator</tt>*/
-  public static final String NEW_LINE = System.getProperty("line.separator");
+	public static final String NEW_LINE = System.getProperty("line.separator");
 	
 	@Id
 	@GeneratedValue
@@ -59,7 +59,7 @@ public class Board {
 	
 	public static Board buildInitialBoard() {
 		Board board = new Board();
-		//Black is the first player of the game
+		//Red is the first player of the game
 		board.prevPlayerMove = Player.BLACK;
 		
 		Set<Piece> pieces = new HashSet<Piece>();
