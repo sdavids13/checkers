@@ -1,24 +1,12 @@
 package edu.gmu.swe681.checkers.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.codehaus.jackson.map.*;
+import org.slf4j.*;
 
 @Entity
 public class Board {
@@ -214,6 +202,17 @@ public class Board {
 			}
 			sB.append(NEW_LINE);
 		}
-		return sB.toString();
+		return sB.toString();  
+	}
+	
+	public String getJSON() {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = null;
+		try {
+			json = ow.writeValueAsString(getPieces());
+		} catch (Exception e) {
+			LOG.error("trouble converting collection of pieces into JSON", e);
+		}
+		return json;
 	}
 }
