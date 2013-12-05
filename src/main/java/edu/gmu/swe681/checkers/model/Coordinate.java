@@ -17,13 +17,13 @@ public class Coordinate {
 	@Min(0)
 	@Max(7)
 	@NotNull
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private Integer x;
 	
 	@Min(0)
 	@Max(7)
 	@NotNull
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private Integer y;
 	
 	Coordinate() {

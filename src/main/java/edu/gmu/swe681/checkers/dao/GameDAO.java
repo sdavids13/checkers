@@ -37,7 +37,7 @@ public class GameDAO extends BaseDAO<Game> {
 	public List<Game> getMyCompletedGames(String username) {
 		return this.entityManager
 			.createQuery("from Game g where g.winner is not null and (g.redPlayer.username=:username or g.blackPlayer.username=:username) order by g.board.prevMoveDate desc", Game.class)
-			.setParameter("username", username).getResultList();
+			.setParameter("username", username).setMaxResults(250).getResultList();
 	}
 
 }

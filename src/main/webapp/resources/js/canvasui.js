@@ -262,7 +262,7 @@ function CanvasCheckers(canvas, rows, cols) {
 			url : location.pathname + '/move',
 			type : 'POST',
 			dataType : 'json',
-			data : JSON.stringify(boardStateAfterMove),  
+			data : JSON.stringify({'board': boardStateAfterMove}),  
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			success : function(data) {

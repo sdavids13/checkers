@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -25,14 +26,15 @@ public class Piece {
 	private Long id;
 	
 	@NotNull
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
 	private Player player;
 	
 	@NotNull
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private Boolean kinged = false;
 
+	@Valid
 	@NotNull
 	@Embedded
 	private Coordinate coordinate;

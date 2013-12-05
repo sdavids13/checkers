@@ -4,7 +4,6 @@ package edu.gmu.swe681.checkers.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -13,14 +12,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import edu.gmu.swe681.checkers.dto.GameMove;
 import edu.gmu.swe681.checkers.model.Board;
 import edu.gmu.swe681.checkers.model.Game;
 import edu.gmu.swe681.checkers.model.Piece;
@@ -81,9 +85,13 @@ public class GamesController {
 	}
 	
 	@RequestMapping(value = "/{gameId}/move", method = RequestMethod.POST)
-	public RedirectView joinGame(@PathVariable("gameId") Long gameId, @RequestBody @Valid List<Piece> pieces, Principal userPrincipal, HttpServletResponse response) throws IOException {
-		User user = userService.retrieve(userPrincipal.getName());
+	public RedirectView performGameMove(@PathVariable("gameId") Long gameId, @Valid @RequestBody GameMove gameMove, Principal userPrincipal, HttpServletResponse response, BindingResult result) throws IOException {
+		if(result.hasErrors()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid board state sent.");
+			return null;
+		}
 		
+		User user = userService.retrieve(userPrincipal.getName());
 		Game game = gameService.retrieve(gameId);
 		if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not apart of this game.");
@@ -96,7 +104,7 @@ public class GamesController {
 			return null;
 		}
 		
-		Board nextBoard = game.getBoard().buildNextBoard(new HashSet<Piece>(pieces));
+		Board nextBoard = game.getBoard().buildNextBoard(new HashSet<Piece>(gameMove.getBoard()));
 		game.updateBoard(nextBoard);
 		
 		gameService.save(game);
@@ -119,6 +127,20 @@ public class GamesController {
 		return new ModelAndView("game", "game", game);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/{gameId}/myturn", method = RequestMethod.GET)
+	public boolean myTurn(@PathVariable("gameId") Long gameId, Principal userPrincipal, HttpServletResponse response) throws IOException {
+		User user = userService.retrieve(userPrincipal.getName());
+		
+		Game game = gameService.retrieve(gameId);
+		if(!game.hasPlayer(user)) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
+			return false;
+		}
+		
+		return game.isUserTurn(user);
+	}
+	
 	@RequestMapping(value = "/{gameId}/history", method = RequestMethod.GET)
 	public ModelAndView getGame(@PathVariable("gameId") Long gameId, HttpServletResponse response) throws IOException {
 		
@@ -135,5 +157,10 @@ public class GamesController {
 	@ExceptionHandler
 	public void handleException(HttpServletResponse response, Exception ex) throws IOException {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+	}
+	
+	@ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
+	public void handleBindException(HttpServletResponse response, Exception ex) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input recieved.");
 	}
 }

@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
-import org.springframework.beans.factory.config.SetFactoryBean;
-
 @Entity
 public class Game {
 
