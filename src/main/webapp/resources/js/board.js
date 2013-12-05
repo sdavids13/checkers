@@ -440,10 +440,11 @@ var Checkers = {
           
           var key = 0;
           array.forEach( function(s) {
-          	if (s.player != 0) {
-          		game.board.initPiece(s.coordinate.y, s.coordinate.x, key, s.player);
+
+          	var player = (s.player == 'RED') ? 2 : 3;
+          		game.board.initPiece(s.coordinate.y, s.coordinate.x, key, player);
           		//update piece to king if it's a king
-          		if (s.kinged !=0) {
+          		if (s.kinged) {
           			var fromIndex = game.board.coordToIndex(s.coordinate.y, s.coordinate.x);
           			var piece = game.board.grid[fromIndex];
           			// King me!
@@ -451,15 +452,15 @@ var Checkers = {
           			game.board.grid[fromIndex] = piece;
           		}
           		key++;
-          	}
           });
         }
 
         this.board = new Board();
         this.board.init();
 
-        this.start = function () {
-            ui.start(this);
+        this.start = function (pieces) {
+          ui.start(this, pieces);
+            
         }
     }
 };

@@ -27,7 +27,7 @@
 			var canvas = document.getElementById('checkers');
 			var ui = new CanvasCheckers(canvas, 8, 8);
 			var game = new Checkers.Game(ui);
-			game.start();
+			game.start(${game.board.getJSON()});
 		</script>
 		<hr>
 	</div>

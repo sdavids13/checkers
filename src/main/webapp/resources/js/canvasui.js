@@ -316,10 +316,14 @@ function CanvasCheckers(canvas, rows, cols) {
 		setTimeout(computerPlay, 500);
 	}
 
-	this.start = function(game_) {
+	this.start = function(game_, pieces) {
 		game = game_;
+		if (pieces) {
+			game.board.populateFromArray(pieces);
+		}
 		canvas.addEventListener("click", onClick, false);
 		Draw(game.board);
+  	
 	}
 
 }
