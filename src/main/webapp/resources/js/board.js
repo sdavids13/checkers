@@ -141,12 +141,12 @@ var Checkers = {
                 throw "moves must be diagonal";
 
             // Non-kings cannot move backwards.
-            if (!(this.getPiece(fromRow, fromCol) & 4)) {
+/*            if (!(this.getPiece(fromRow, fromCol) & 4)) {
                 if (this.player == PlayerTwo && toRow > fromRow)
                     throw "this piece must move forward";
                 else if (this.player == PlayerOne && toRow < fromRow)
                     throw "this piece must move forward";
-            }
+            }*/
 
             if (rowDelta > 1) {
                 if (rowDelta > 2)
@@ -460,7 +460,7 @@ var Checkers = {
 
         this.start = function (pieces) {
           ui.start(this, pieces);
-            
         }
+        
     }
 };
