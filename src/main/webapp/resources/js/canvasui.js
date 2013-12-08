@@ -94,7 +94,7 @@ function CanvasCheckers(canvas, rows, cols) {
 				var posX = (col * PieceWidth) + (PieceWidth / 2);
 				var posY = (row * PieceHeight) + (PieceHeight / 2);
 
-				var color = (piece == Checkers.PlayerOne) ? "#ed1c24" : "#00a2e8";
+				var color = (piece == Checkers.PlayerOne) ? "#ed1c24" : "#000000";
 				drawCircle(posX, posY, radius, 4, color);
 				if (b.isKing(row, col)) {
 					// Draw a more different S
@@ -245,7 +245,6 @@ function CanvasCheckers(canvas, rows, cols) {
 			},
 			error : function(data, status, er) {
 				console.debug("error: " + data + " status: " + status + " er:" + er);
-				alert(data.responseText);
 				Draw(game.board, selectedRow, selectedCol);
 			}
 		});
