@@ -122,7 +122,7 @@ public class GamesController {
 			return null;
 		}
 		
-		return new ModelAndView("game", "game", game);
+		return new ModelAndView("game", "game", game).addObject("myTurn", game.isUserTurn(user));
 	}
 	
 	@ResponseBody

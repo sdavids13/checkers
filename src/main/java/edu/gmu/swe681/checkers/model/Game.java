@@ -116,7 +116,7 @@ public class Game {
 	}
 
 	public boolean isUserTurn(User user) {
-		return user.equals(getUser(Player.otherPlayer(getLastPlayer())));
+		return gameStarted() && user.equals(getUser(Player.otherPlayer(getLastPlayer())));
 	}
 	
 	private Player getLastPlayer() {
@@ -133,5 +133,9 @@ public class Game {
 		}
 		
 		return player == Player.RED ? redPlayer : blackPlayer;
+	}
+	
+	private boolean gameStarted() {
+		return getSecondPlayer() != null;
 	}
 }

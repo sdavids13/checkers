@@ -242,6 +242,7 @@ function CanvasCheckers(canvas, rows, cols) {
 			success : function(data) {
 				//not currently able to use the 'new RedirectView("/games/" + gameId, true);' returned by controller
 				Draw(game.board);
+				$.data(document.body, 'myTurn', false);
 			},
 			error : function(data, status, er) {
 				console.debug("error: " + data + " status: " + status + " er:" + er);
