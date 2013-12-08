@@ -42,3 +42,9 @@ input[type="color"],
 .board .RED {
 	background-color: brown;
 }
+
+.board .kinged {
+	background-image:url('http://i.imgur.com/HYQkl.png');
+    background-repeat:no-repeat;
+    background-position:center;
+}
