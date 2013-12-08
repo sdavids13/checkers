@@ -235,22 +235,22 @@ function CanvasCheckers(canvas, rows, cols) {
 		$.ajax({
 			url : location.pathname + '/move',
 			type : 'POST',
-			dataType : 'json',
+			dataType : 'html',
 			data : JSON.stringify({'board': boardStateAfterMove}),  
 			contentType : 'application/json',
 			mimeType : 'application/json',
 			success : function(data) {
-				var dataAsString = JSON.stringify(data);
-				var as = JSON.parse(dataAsString);  //array containing the player pieces and their placement
-				game.board.populateFromArray(as);
+				//not currently able to use the 'new RedirectView("/games/" + gameId, true);' returned by controller
 				Draw(game.board);
 			},
 			error : function(data, status, er) {
-				console.error("error: " + data + " status: " + status + " er:" + er);
+				console.debug("error: " + data + " status: " + status + " er:" + er);
+				alert(data.responseText);
 				Draw(game.board, selectedRow, selectedCol);
 			}
 		});
 
+		
 	}
 
 	this.start = function(game_, pieces) {
