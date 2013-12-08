@@ -223,6 +223,15 @@ function CanvasCheckers(canvas, rows, cols) {
 		}
 		var boardStateAfterMove = getBoardState();
     
+    // The move was valid. If the player is allowed to move again,
+    // re-select the piece and redraw.
+    if (game.inMultiTurn()) {
+        selectedRow = row;
+        selectedCol = col;
+        Draw(game.board, row, col);
+        return;
+    }
+		
 		$.ajax({
 			url : location.pathname + '/move',
 			type : 'POST',
