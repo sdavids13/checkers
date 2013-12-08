@@ -25,10 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import edu.gmu.swe681.checkers.dto.GameMove;
-import edu.gmu.swe681.checkers.model.Board;
-import edu.gmu.swe681.checkers.model.Game;
-import edu.gmu.swe681.checkers.model.Piece;
-import edu.gmu.swe681.checkers.model.User;
+import edu.gmu.swe681.checkers.model.*;
 import edu.gmu.swe681.checkers.service.GameService;
 import edu.gmu.swe681.checkers.service.UserService;
 
@@ -100,6 +97,7 @@ public class GamesController {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The game is over, " + game.getWinner().getUsername() + " won.");
 			return null;
 		} else if(!game.isUserTurn(user)) {
+			LOG.debug("it's not " +user.getUsername() + "'s turn");
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "It's not your turn.");
 			return null;
 		}
@@ -140,6 +138,22 @@ public class GamesController {
 		
 		return game.isUserTurn(user);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/{gameId}/mycolor", method = RequestMethod.GET)
+	public String myPlayerColor(@PathVariable("gameId") Long gameId, Principal userPrincipal, HttpServletResponse response) throws IOException {
+		User user = userService.retrieve(userPrincipal.getName());
+		
+		Game game = gameService.retrieve(gameId);
+		if(!game.hasPlayer(user)) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
+			return "";
+		}
+		
+		return game.getBlackPlayer().equals(user) ? Player.BLACK.toString() : Player.RED.toString();
+	}
+	
+	
 	
 	@RequestMapping(value = "/{gameId}/history", method = RequestMethod.GET)
 	public ModelAndView getGame(@PathVariable("gameId") Long gameId, HttpServletResponse response) throws IOException {

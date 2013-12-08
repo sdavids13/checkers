@@ -115,39 +115,6 @@ function CanvasCheckers(canvas, rows, cols) {
 	var game;
 	var selectedRow = undefined;
 	var selectedCol = undefined;
-
-	var computerPlay = function() {
-		var moves = new Checkers.MoveList(game.board.area());
-		game.board.fillMoveList(moves);
-
-		var result;
-		if (moves.length > 1) {
-			result = game.suggest(3000);
-			var seconds = result.elapsed / 1000;
-			var nPerSec = result.playouts / seconds;
-		} else {
-			move = moves.list[0];
-			result = {}
-			result.fromRow = move >> 24;
-			result.fromCol = (move >> 16) & 0xFF;
-			result.toRow = (move >> 8) & 0xFF;
-			result.toCol = (move) & 0xFF;
-		}
-
-		console.log("computer moves to row: " + result.toRow +", col: " + result.toCol);
-		// TODO: this portion need to be moved to server side.
-		var winner = game.move(result.fromRow, result.fromCol, result.toRow, result.toCol);
-
-		if (winner) {
-			var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
-			alert(color + " player wins! Refresh to play again.");
-			return;
-		}
-
-		Draw(game.board);
-		if (game.inMultiTurn())
-			setTimeout(computerPlay, 400);
-	}
 	
 	var getBoardState = function()  {
 		jsonObj = [];
@@ -212,8 +179,6 @@ function CanvasCheckers(canvas, rows, cols) {
 		var row = Math.floor(y / PieceHeight);
 		var col = Math.floor(x / PieceWidth);
 
-		// Don't let the player move during the computer's turn.
-		
 		//TODO: re-factor to prevent player2 from playing during player3's turn, or vice-versa 
 		/*if (game.player() == computer)
 			return;*/
@@ -222,9 +187,9 @@ function CanvasCheckers(canvas, rows, cols) {
 		if (player) {
 			
 				//TODO: disabled to allow movement of both blue and red pieces
-/*			if (player != game.player())
+			if (player != game.player())
 				return;  
-*/
+
 			// If the player is selecting an own piece, just update the display.
 			if (!game.inMultiTurn()) {
 				selectedRow = row;
@@ -268,40 +233,8 @@ function CanvasCheckers(canvas, rows, cols) {
 			success : function(data) {
 				var dataAsString = JSON.stringify(data);
 				var as = JSON.parse(dataAsString);  //array containing the player pieces and their placement
-			
-				//TESTING
 				game.board.populateFromArray(as);
-				
-					//TODO: disabled because server should make determination about winner and invalid moves
-/*				try {
-					if (winner) {  // TODO: shift winner determination to server
-						var color = winner == Checkers.PlayerOne ? "Red" : "Blue";
-						alert(color + " player wins! Refresh to play again.");
-							return;
-					}
-				} catch (e) {
-					alert('Invalid move: ' + e);
-					Draw(game.board, selectedRow, selectedCol);
-					return;
-				}
-*/
-				//TODO: disabled multi-move check
-				// The move was valid. If the player is allowed to move again,
-				// re-select the piece and redraw.
-/*				if (game.inMultiTurn()) {
-					selectedRow = row;
-					selectedCol = col;
-					Draw(game.board, row, col);
-					return;
-				}
-*/
 				Draw(game.board);
-				
-				//TODO: refactor for 2 player use
-				// Otherwise, draw and let the computer make a move.
-/*				if (computer)
-					setTimeout(computerPlay, 400); 
-*/
 			},
 			error : function(data, status, er) {
 				console.error("error: " + data + " status: " + status + " er:" + er);
@@ -311,19 +244,31 @@ function CanvasCheckers(canvas, rows, cols) {
 
 	}
 
-	this.switchSides = function() {
-		computer = computer ^ 1;
-		setTimeout(computerPlay, 500);
-	}
-
 	this.start = function(game_, pieces) {
 		game = game_;
 		if (pieces) {
 			game.board.populateFromArray(pieces);
 		}
 		canvas.addEventListener("click", onClick, false);
+		
+		$.ajax({
+			url : location.pathname + '/mycolor',
+			type : 'GET',
+			success : function(data) {
+				game.board.player = data == "RED" ? 2 : 3;
+				Draw(game.board);
+			},
+			error : function(data, status, er) {
+				console.error("error: " + data + " status: " + status + " er:" + er);
+			}
+		});
+	}
+	
+	this.refreshKludge = function(game_, pieces) {
+		game = game_;
+		console.debug(pieces);
+		game.board.populateFromArray(pieces);
 		Draw(game.board);
-  	
 	}
 
 }

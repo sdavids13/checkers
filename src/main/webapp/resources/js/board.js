@@ -127,8 +127,8 @@ var Checkers = {
             // Source piece must be the current player.
         	
         		//TODO: re-enable commented-out section below after we set correct playerId
-            /*if (this.getPlayer(fromRow, fromCol) != this.player)   
-                throw "piece is not yours";*/
+            if (this.getPlayer(fromRow, fromCol) != this.player)   
+                throw "piece is not yours";
 
             // Destination cannot have a filled square.
             if (this.getPiece(toRow, toCol))
@@ -141,12 +141,12 @@ var Checkers = {
                 throw "moves must be diagonal";
 
             // Non-kings cannot move backwards.
-/*            if (!(this.getPiece(fromRow, fromCol) & 4)) {
+            if (!(this.getPiece(fromRow, fromCol) & 4)) {
                 if (this.player == PlayerTwo && toRow > fromRow)
                     throw "this piece must move forward";
                 else if (this.player == PlayerOne && toRow < fromRow)
                     throw "this piece must move forward";
-            }*/
+            }
 
             if (rowDelta > 1) {
                 if (rowDelta > 2)
@@ -462,5 +462,8 @@ var Checkers = {
           ui.start(this, pieces);
         }
         
+        this.refreshKludge = function (pieces) {
+        	ui.refreshKludge(this, pieces);
+        }
     }
 };
