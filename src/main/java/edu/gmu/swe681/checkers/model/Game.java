@@ -36,7 +36,7 @@ public class Game {
 	private Board board;
 	
 	@OrderBy("prevMoveDate desc")
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="game", fetch = FetchType.LAZY)
+	@OneToMany(cascade={CascadeType.MERGE, CascadeType.REFRESH}, mappedBy="game", fetch = FetchType.LAZY)
 	private List<Board> history;
 
 	Game() {
