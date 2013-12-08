@@ -24,11 +24,16 @@
 		</p>
 		<canvas id="checkers"></canvas>
 		<script>
-		
-  			var canvas = document.getElementById('checkers');
-	 			var ui = new CanvasCheckers(canvas, 8, 8);
-	 			var game = new Checkers.Game(ui);
-	 			game.start(${game.board.getJSON()});
+
+			var canvas = document.getElementById('checkers');
+			var ui = new CanvasCheckers(canvas, 8, 8);
+			var game = new Checkers.Game(ui);
+			
+			 var timerId = setInterval(function () {
+         window.location.reload();
+     }, 10000);
+			 
+ 			game.start(${game.board.getJSON()});
  
 		</script>
 		<hr>
