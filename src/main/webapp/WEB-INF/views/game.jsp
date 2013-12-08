@@ -36,7 +36,7 @@
 		<h2>Checkers</h2>
 		<p>
 			<strong id='red' style='color: red'>Red: ${game.firstPlayer.username}</strong><br />
-			<strong id='blue' style='color: blue'>Blue: ${game.secondPlayer.username} </strong><br>
+			<strong id='black' style='color: black'>Black: ${game.secondPlayer.username} </strong><br>
 			Rules are <a href="http://en.wikipedia.org/wiki/English_draughts">here</a>.
 		</p>
 		
@@ -60,7 +60,6 @@
 				</script>
 			</c:otherwise>
 		</c:choose>
-		
 		<hr>
 	</div>
 </body>
