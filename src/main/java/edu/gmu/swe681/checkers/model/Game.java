@@ -70,6 +70,10 @@ public class Game {
 	public User getWinner() {
 		return winner;
 	}
+	
+	public void setWinner(User user) {
+		this.winner = user;
+	}
 
 	public Board getBoard() {
 		return board;

@@ -215,4 +215,19 @@ public class Board {
 		}
 		return json;
 	}
+	
+	public Player getWinner() {
+		Set<Player> remainingPlayerPieces = new HashSet<Player>(); 
+		for(Piece piece : getPieces()) {
+			remainingPlayerPieces.add(piece.getPlayer());
+		}
+		
+		if(remainingPlayerPieces.isEmpty()) {
+			throw new IllegalStateException("No players found on the board.");
+		} else if(remainingPlayerPieces.size() > 1) {
+			return null;
+		} else {
+			return Player.otherPlayer(remainingPlayerPieces.iterator().next());
+		}
+	}
 }

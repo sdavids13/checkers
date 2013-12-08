@@ -15,7 +15,7 @@
 		 			url : location.pathname + '/myturn',
 		 			type : 'GET',
 		 			success : function(data) {
-		 				if(data == true || data == 'true') {
+		 				if(data == true || data == 'true' || data == 'Game Over') {
 							window.location.reload();
 		 				}
 		 			}

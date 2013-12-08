@@ -104,6 +104,10 @@ public class GamesController {
 		
 		Board nextBoard = game.getBoard().buildNextBoard(new HashSet<Piece>(gameMove.getBoard()));
 		game.updateBoard(nextBoard);
+		Player winner = nextBoard.getWinner();
+		if(winner != null) {
+			game.setWinner(game.getUser(winner));
+		}
 		
 		gameService.save(game);
 		
@@ -127,7 +131,7 @@ public class GamesController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/{gameId}/myturn", method = RequestMethod.GET)
-	public boolean myTurn(@PathVariable("gameId") Long gameId, Principal userPrincipal, HttpServletResponse response) throws IOException {
+	public Object myTurn(@PathVariable("gameId") Long gameId, Principal userPrincipal, HttpServletResponse response) throws IOException {
 		User user = userService.retrieve(userPrincipal.getName());
 		
 		Game game = gameService.retrieve(gameId);
@@ -136,7 +140,12 @@ public class GamesController {
 			return false;
 		}
 		
-		return game.isUserTurn(user);
+		if(game.getWinner() != null) {
+			return "Game Over";
+		} else {
+			return game.isUserTurn(user);
+		}
+		
 	}
 	
 	@ResponseBody
