@@ -40,9 +40,8 @@
 				<c:url value="/games/${game.id}/join" var="joinGameLink" />
 				<tr>
 					<td>
-						<a title="Profile" href="<c:out value="${userLink}" />"><c:out value="${game.firstPlayer.username}" /></a>
 						<form action="<c:out value="${joinGameLink}" />" method="POST">
-							<input type="submit" value="Join" class="btn primary">
+							<input type="submit" value="Join" class="btn primary">&nbsp;&nbsp;&nbsp;Opponent: <a title="Profile" href="<c:out value="${userLink}" />"><c:out value="${game.firstPlayer.username}" /></a>
 						</form>
 					</td>
 				</tr>

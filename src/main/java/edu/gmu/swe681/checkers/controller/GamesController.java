@@ -119,7 +119,10 @@ public class GamesController {
 		User user = userService.retrieve(userPrincipal.getName());
 		
 		Game game = gameService.retrieve(gameId);
-		if(game.getWinner() != null) {
+		if(game == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "The specified game wasn't found.");
+			return null;
+		} else if(game.getWinner() != null) {
 			return new ModelAndView(new RedirectView("/games/" + gameId + "/history", true));
 		} else if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
@@ -135,7 +138,10 @@ public class GamesController {
 		User user = userService.retrieve(userPrincipal.getName());
 		
 		Game game = gameService.retrieve(gameId);
-		if(!game.hasPlayer(user)) {
+		if(game == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "The specified game wasn't found.");
+			return null;
+		} else if(!game.hasPlayer(user)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not a part of this game.");
 			return false;
 		}

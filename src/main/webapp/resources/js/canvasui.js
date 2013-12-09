@@ -150,7 +150,7 @@ function CanvasCheckers(canvas, rows, cols) {
 				//coordinate = {"x" : row, "y" : col};  //the "view" way
 				coordinate = {"x" : col, "y" : row};    // the "swe681.checkers.model.Coordinate" way
 				if(player == 2 || player == 3) {
-					piece ={"player" : player == 2 ? "RED" : "BLACK","kinged" : new Boolean(isKing), "coordinate" : coordinate};
+					piece ={"player" : player == 2 ? "RED" : "BLACK","kinged" : new Boolean(isKing).valueOf(), "coordinate" : coordinate};
 					jsonObj.push(piece);
 				}
 				  
@@ -245,8 +245,8 @@ function CanvasCheckers(canvas, rows, cols) {
 				$.data(document.body, 'myTurn', false);
 			},
 			error : function(data, status, er) {
-				console.debug("error: " + data + " status: " + status + " er:" + er);
-				Draw(game.board, selectedRow, selectedCol);
+				alert(data.status + ": " + data.statusText);
+				game.board.populateFromArray(boardStatePriorToMove);
 			}
 		});
 

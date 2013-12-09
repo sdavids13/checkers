@@ -227,7 +227,7 @@ public class Board {
 		} else if(remainingPlayerPieces.size() > 1) {
 			return null;
 		} else {
-			return Player.otherPlayer(remainingPlayerPieces.iterator().next());
+			return remainingPlayerPieces.iterator().next();
 		}
 	}
 }
