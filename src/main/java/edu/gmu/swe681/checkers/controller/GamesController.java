@@ -97,7 +97,6 @@ public class GamesController {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The game is over, " + game.getWinner().getUsername() + " won.");
 			return null;
 		} else if(!game.isUserTurn(user)) {
-			LOG.debug("it's not " +user.getUsername() + "'s turn");
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "It's not your turn.");
 			return null;
 		}
@@ -175,9 +174,8 @@ public class GamesController {
 		
 		Game game = gameService.retrieve(gameId);
 		if(game.getWinner() == null) {
-			//TODO: UNCOMMENT WHEN DONE TESTING
-			//response.sendError(HttpServletResponse.SC_NOT_FOUND, "Game has not ended, not history available.");
-			//return null;
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Game has not ended, not history available.");
+			return null;
 		}
 		
 		return new ModelAndView("history", "game", game);

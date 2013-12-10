@@ -12,7 +12,6 @@
 		<intercept-url pattern="/signup" access="permitAll" />
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/logout" access="permitAll" />
-		<intercept-url pattern="/admin/h2" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		<remember-me key="myAppKey" token-validity-seconds="1296000"/>

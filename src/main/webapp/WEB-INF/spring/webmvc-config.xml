@@ -34,22 +34,5 @@
 		<property name="suffix" value =".jsp" />
 		<property name="order" value="1" />
 	</bean>
-	<!-- 
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="ignoreUnresolvablePlaceholders">
-			<value>true</value>
-		</property>
-		<property name="ignoreResourceNotFound">
-			<value>true</value>
-		</property>
-		<property name="locations">
-			<list>
-				<value>classpath:config/email.properties</value>
-				<value>classpath:config/localhost.properties</value>
-				<value>classpath:config/${SERVER_NAME}.properties</value>
-	
-			</list>
-		</property>
-	</bean> -->
  
 </beans>
