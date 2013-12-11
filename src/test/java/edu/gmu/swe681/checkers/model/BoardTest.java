@@ -1,7 +1,9 @@
 package edu.gmu.swe681.checkers.model;
 
 import static org.junit.Assert.*;
+
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,6 +50,70 @@ public class BoardTest {
 		String results = gameBoard.displayBoard();
 		System.out.println(results);
 		assertTrue(StringUtils.contains(results, "r"));		
+	}
+	
+	@Test
+	public void testMoveValidation() {
+		assertTrue(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(1, 1)), 
+			Collections.<Piece> emptyList()
+		));
+		
+		assertFalse(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			Collections.<Piece> emptyList()
+		));
+		
+		assertFalse(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(0, 1)), 
+			Collections.<Piece> emptyList()
+		));
+		
+		assertTrue(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(2, 2)), 
+			Arrays.asList(
+				new Piece(Player.RED, new Coordinate(1, 1))
+			)
+		));
+		
+		assertFalse(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(3, 3)), 
+			Arrays.asList(
+				new Piece(Player.RED, new Coordinate(1, 1))
+			)
+		));
+		
+		assertTrue(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(0, 4)), 
+			Arrays.asList(
+				new Piece(Player.RED, new Coordinate(1, 1)),
+				new Piece(Player.RED, new Coordinate(1, 3))
+			)
+		));
+		
+		assertFalse(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(2, 2)), 
+			Arrays.asList(
+				new Piece(Player.RED, new Coordinate(1, 1)),
+				new Piece(Player.RED, new Coordinate(2, 2))
+			)
+		));
+		
+		assertFalse(Board.isValidMove(
+			new Piece(Player.BLACK, new Coordinate(0, 0)), 
+			new Piece(Player.BLACK, new Coordinate(6, 6)), 
+			Arrays.asList(
+				new Piece(Player.RED, new Coordinate(1, 1)),
+				new Piece(Player.RED, new Coordinate(2, 2))
+			)
+		));
 	}
 
 }

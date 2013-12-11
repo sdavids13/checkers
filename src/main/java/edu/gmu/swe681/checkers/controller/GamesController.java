@@ -25,7 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import edu.gmu.swe681.checkers.dto.GameMove;
-import edu.gmu.swe681.checkers.model.*;
+import edu.gmu.swe681.checkers.model.Board;
+import edu.gmu.swe681.checkers.model.Game;
+import edu.gmu.swe681.checkers.model.Piece;
+import edu.gmu.swe681.checkers.model.Player;
+import edu.gmu.swe681.checkers.model.User;
 import edu.gmu.swe681.checkers.service.GameService;
 import edu.gmu.swe681.checkers.service.UserService;
 
@@ -188,6 +192,7 @@ public class GamesController {
 	
 	@ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
 	public void handleBindException(HttpServletResponse response, Exception ex) throws IOException {
+		LOG.info("Invalid request received: ", ex.getMessage(), ex);
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input recieved.");
 	}
 }

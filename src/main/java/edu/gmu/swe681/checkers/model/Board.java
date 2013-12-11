@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.map.*;
 import org.slf4j.*;
 
@@ -103,18 +104,53 @@ public class Board {
 		
 		LOG.info("Moved piece: " + movedPiece + " and removed pieces: " + removedPieces);
 		
-		Set<Piece> movedTo = removeAll(newBoardLayout, this.pieces);
-		if(movedTo.size() != 1) {
+		Set<Piece> movedToPieces = removeAll(newBoardLayout, this.pieces);
+		if(movedToPieces.size() != 1) {
 			throw new IllegalArgumentException("Invalid number of movements detected!");
 		}
 		
+		Piece movedTo = movedToPieces.iterator().next();
+		
+		if(!isValidMove(movedPiece, movedTo, removedPieces)) {
+			throw new IllegalArgumentException("Invalid move detected!");
+		}
+		
 		Set<Piece> boardUnion = removeAll(this.pieces, movedAndRemovedPieces);
-		boardUnion.addAll(movedTo);
+		boardUnion.addAll(movedToPieces);
 		newBoard.setPieces(boardUnion);
 
-		//TODO walk chain to see if the movedPiece could jump all removedPieces + verify it landed in the spot that it says it does
-		
 		return newBoard;
+	}
+	
+	static boolean isValidMove(final Piece from, final Piece to, final Collection<Piece> jumpedPieces) {
+		if(CollectionUtils.isEmpty(jumpedPieces)) {
+			return from.isAdjacent(to);
+		}
+		
+		for(Piece jumpedPiece : jumpedPieces) {
+			if(from.isAdjacent(jumpedPiece)) {
+				if(jumpedPieces.size() == 1) {
+					if(jumpedPiece.isAdjacent(to)) {
+						return true;
+					} else { 
+						return false;
+					}
+				} else {
+					Set<Piece> remainingJumpedPieces = new HashSet<Piece>(jumpedPieces);
+					remainingJumpedPieces.remove(jumpedPiece);
+					
+					Coordinate jumpedCoord = jumpedPiece.getCoordinate();
+					Coordinate landingCoord = new Coordinate(
+							jumpedCoord.getX() + (jumpedCoord.getX() - from.getCoordinate().getX()),
+							jumpedCoord.getY() + (jumpedCoord.getY() - from.getCoordinate().getY()));
+					Piece jumpLanding = new Piece(from.getPlayer(), landingCoord);
+					
+					return isValidMove(jumpLanding, to, remainingJumpedPieces);
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	public Game getGame() {

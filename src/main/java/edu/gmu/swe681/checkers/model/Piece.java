@@ -96,5 +96,23 @@ public class Piece {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
+	
+	/**
+	 * Method that tells if the piece is adjacent to the current piece in any
+	 * horizontal direction.
+	 */
+	public boolean isAdjacent(Piece piece) {
+		if(piece == null) {
+			return false;
+		}
+		
+		Coordinate adjCoord = piece.getCoordinate();
+		if(Math.abs(coordinate.getX() - adjCoord.getX()) == 1 
+				&& Math.abs(coordinate.getY() - adjCoord.getY()) == 1) {
+			return true;
+		}
+		
+		return false;
+	}
 
 }
